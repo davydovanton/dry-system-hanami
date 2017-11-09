@@ -1,4 +1,5 @@
 require "dry/system/hanami/version"
+require "dry/system/hanami/resolver"
 
 module Dry
   module System
