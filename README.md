@@ -35,6 +35,9 @@ class Container < Dry::System::Container
   register_folder! 'tasks/interactors', resolver: ->(k) { k }
   register_folder! 'tasks/matchers', resolver: ->(k) { k::Matcher }
 
+  # load specific file
+  load_file! 'tasks/services/auth_user'
+
   configure
 end
 ```
