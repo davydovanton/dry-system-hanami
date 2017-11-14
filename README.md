@@ -19,6 +19,9 @@ Or install it yourself as:
 
 ## Usage
 
+### `register_folder!`
+You can regitser full folder to your container:
+
 ```ruby
 require 'dry/system/container'
 require 'dry/system/hanami'
@@ -26,17 +29,27 @@ require 'dry/system/hanami'
 class Container < Dry::System::Container
   extend Dry::System::Hanami::Resolver
 
-  #  Core
   register_folder! 'project_name/repositories'
-  register_folder! 'project_name/core'
-  register_folder! 'project_name/services'
+  # or with custom resolver
+  register_folder! 'project_name/matchers', resolver: ->(k) { k }
 
-  # Tasks domain
-  register_folder! 'tasks/interactors', resolver: ->(k) { k }
-  register_folder! 'tasks/matchers', resolver: ->(k) { k::Matcher }
+  configure
+end
+```
 
-  # load specific file
-  load_file! 'tasks/services/auth_user'
+### `load_file!`
+You can regitser specific file to your container:
+
+```ruby
+require 'dry/system/container'
+require 'dry/system/hanami'
+
+class Container < Dry::System::Container
+  extend Dry::System::Hanami::Resolver
+
+  load_file! 'project_name/repositories/users'
+  # or with custom resolver
+  load_file! 'project_name/matchers/git_host', resolver: ->(k) { k }
 
   configure
 end
