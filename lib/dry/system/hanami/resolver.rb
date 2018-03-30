@@ -20,7 +20,14 @@ module Dry
         def load!(path, resolver: ->(k) { k.new })
           load_file!(path)
 
-          unnecessary_part = path[/repositories/] ? "lib/#{PROJECT_NAME}/repositories" : "lib/#{PROJECT_NAME}/"
+          unnecessary_part = case path
+                             when /repositories/
+                               "lib/#{PROJECT_NAME}/repositories"
+                             when /entities/
+                               "lib/#{PROJECT_NAME}/entities"
+                             else
+                               "lib/#{PROJECT_NAME}/"
+                             end
           right_path = path.sub(unnecessary_part, '')
 
           resolver.call(Object.const_get(Inflecto.classify(right_path).sub('Statu', 'Status')))
