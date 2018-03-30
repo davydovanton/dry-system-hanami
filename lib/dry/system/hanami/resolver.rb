@@ -9,7 +9,7 @@ module Dry
 
         def register_folder!(folder, resolver: ->(k) { k.new })
           all_files_in_folder(folder).each do |file|
-            register_name = file.sub(PROJECT_FOLDER, '').gsub('/', '.').gsub(/_repository\z/, '')
+            register_name = file.sub(PROJECT_FOLDER, '').tr('/', '.').sub(/_repository\z/, '')
             register(register_name, memoize: true) { load! file, resolver: resolver }
           end
         end
@@ -17,7 +17,7 @@ module Dry
         def all_files_in_folder(folder)
           Dir
             .glob("lib/#{folder}/**/*.rb")
-            .map! { |file_name| "#{file_name.sub!('.rb', '')}" }
+            .map! { |file_name| file_name.sub('.rb', '').to_s }
         end
 
         def load!(path, resolver: ->(k) { k.new })
