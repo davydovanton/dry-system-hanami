@@ -1,12 +1,15 @@
+# frozen_string_literal: true
+
 module Dry
   module System
     module Hanami
       module Resolver
         PROJECT_NAME = ::Hanami::Environment.new.project_name
+        PROJECT_FOLDER = "lib/#{PROJECT_NAME}/".freeze
 
         def register_folder!(folder, resolver: ->(k) { k.new })
           all_files_in_folder(folder).each do |file|
-            register_name = file.sub("lib/#{PROJECT_NAME}/", '').gsub('/', '.').gsub(/_repository\z/, '')
+            register_name = file.sub(PROJECT_FOLDER, '').gsub('/', '.').gsub(/_repository\z/, '')
             register(register_name, memoize: true) { load! file, resolver: resolver }
           end
         end
@@ -22,11 +25,11 @@ module Dry
 
           unnecessary_part = case path
                              when /repositories/
-                               "lib/#{PROJECT_NAME}/repositories"
+                               "#{PROJECT_FOLDER}repositories"
                              when /entities/
-                               "lib/#{PROJECT_NAME}/entities"
+                               "#{PROJECT_FOLDER}entities"
                              else
-                               "lib/#{PROJECT_NAME}/"
+                               PROJECT_FOLDER
                              end
           right_path = path.sub(unnecessary_part, '')
 
