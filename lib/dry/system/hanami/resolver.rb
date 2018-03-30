@@ -30,7 +30,7 @@ module Dry
                              end
           right_path = path.sub(unnecessary_part, '')
 
-          resolver.call(Object.const_get(Inflecto.classify(right_path).sub('Statu', 'Status')))
+          resolver.call(Object.const_get(Inflecto.camelize(right_path)))
         end
 
         def load_file!(path)
