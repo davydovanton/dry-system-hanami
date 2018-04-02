@@ -7,7 +7,6 @@ module Dry
         PROJECT_NAME = ::Hanami::Environment.new.project_name
         LIB_FOLDER = "lib/".freeze
         CORE_FOLDER = "#{PROJECT_NAME}/".freeze
-        PROJECT_FOLDER = "#{LIB_FOLDER}#{CORE_FOLDER}".freeze
         DEFAULT_RESOLVER = ->(k) { k.new }
 
         def register_folder!(folder, resolver: DEFAULT_RESOLVER)
