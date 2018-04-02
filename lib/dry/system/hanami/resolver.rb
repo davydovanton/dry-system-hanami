@@ -17,9 +17,10 @@ module Dry
         end
 
         def all_files_in_folder(folder)
-          Dir
-            .glob("lib/#{folder}/**/*.rb")
-            .map! { |file_name| file_name.sub('.rb', '').to_s }
+          Dir.chdir(::Hanami.root) do
+            Dir.glob("lib/#{folder}/**/*.rb")
+               .map! { |file_name| file_name.sub('.rb', '').to_s }
+          end
         end
 
         def load!(path, resolver: ->(k) { k.new })
