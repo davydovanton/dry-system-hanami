@@ -27,11 +27,11 @@ module Dry
 
           unnecessary_part = case path
                              when /repositories/
-                               "#{PROJECT_FOLDER}repositories"
+                               "#{CORE_FOLDER}repositories/"
                              when /entities/
-                               "#{PROJECT_FOLDER}entities"
+                               "#{CORE_FOLDER}entities/"
                              else
-                               PROJECT_FOLDER
+                               CORE_FOLDER
                              end
           right_path = path.sub(LIB_FOLDER, '').sub(unnecessary_part, '')
 
