@@ -8,8 +8,9 @@ module Dry
         LIB_FOLDER = "lib/".freeze
         CORE_FOLDER = "#{PROJECT_NAME}/".freeze
         PROJECT_FOLDER = "#{LIB_FOLDER}#{CORE_FOLDER}".freeze
+        DEFAULT_RESOLVER = ->(k) { k.new }
 
-        def register_folder!(folder, resolver: ->(k) { k.new })
+        def register_folder!(folder, resolver: DEFAULT_RESOLVER)
           all_files_in_folder(folder).each do |file|
             register_name = file.sub(LIB_FOLDER, '').sub(CORE_FOLDER, '').tr('/', '.').sub(/_repository\z/, '')
             register(register_name, memoize: true) { load! file, resolver: resolver }
@@ -23,7 +24,7 @@ module Dry
           end
         end
 
-        def load!(path, resolver: ->(k) { k.new })
+        def load!(path, resolver: DEFAULT_RESOLVER)
           load_file!(path)
 
           unnecessary_part = case path
