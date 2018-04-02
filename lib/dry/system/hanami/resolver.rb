@@ -5,11 +5,13 @@ module Dry
     module Hanami
       module Resolver
         PROJECT_NAME = ::Hanami::Environment.new.project_name
-        PROJECT_FOLDER = "lib/#{PROJECT_NAME}/".freeze
+        LIB_FOLDER = "lib/".freeze
+        CORE_FOLDER = "#{PROJECT_NAME}/".freeze
+        PROJECT_FOLDER = "#{LIB_FOLDER}#{CORE_FOLDER}".freeze
 
         def register_folder!(folder, resolver: ->(k) { k.new })
           all_files_in_folder(folder).each do |file|
-            register_name = file.sub(PROJECT_FOLDER, '').tr('/', '.').sub(/_repository\z/, '')
+            register_name = file.sub(LIB_FOLDER, '').sub(CORE_FOLDER, '').tr('/', '.').sub(/_repository\z/, '')
             register(register_name, memoize: true) { load! file, resolver: resolver }
           end
         end
@@ -31,7 +33,7 @@ module Dry
                              else
                                PROJECT_FOLDER
                              end
-          right_path = path.sub(unnecessary_part, '')
+          right_path = path.sub(LIB_FOLDER, '').sub(unnecessary_part, '')
 
           resolver.call(Object.const_get(Inflecto.camelize(right_path)))
         end
