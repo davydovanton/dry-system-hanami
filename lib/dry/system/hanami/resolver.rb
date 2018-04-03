@@ -11,23 +11,20 @@ module Dry
 
         def register_folder!(folder, resolver: DEFAULT_RESOLVER)
           all_files_in_folder(folder).each do |file|
-            register_name = file.sub(LIB_FOLDER, '').sub(CORE_FOLDER, '').tr('/', '.').sub(/_repository\z/, '')
-            register(register_name, memoize: true) { load! file, resolver: resolver }
+            register_file(file, resolver)
           end
         end
 
         def register_file!(file, resolver: DEFAULT_RESOLVER)
-          find_file(file) do |f|
-            register_name = f.sub(LIB_FOLDER, '').sub(CORE_FOLDER, '').tr('/', '.').sub(/_repository\z/, '')
-            register(register_name, memoize: true) { load! f, resolver: resolver }
-          end
+          register_file(find_file(file), resolver)
         end
 
         private
 
         def find_file(file)
           Dir.chdir(::Hanami.root) do
-            yield *Dir.glob("lib/#{file}.rb").first.sub('.rb', '').to_s
+            Dir.glob("lib/#{file}.rb")
+               .map! { |file_name| file_name.sub('.rb', '').to_s }.first
           end
         end
 
@@ -38,7 +35,12 @@ module Dry
           end
         end
 
-        def load!(path, resolver: DEFAULT_RESOLVER)
+        def register_file(file, resolver)
+          register_name = file.sub(LIB_FOLDER, '').sub(CORE_FOLDER, '').tr('/', '.').sub(/_repository\z/, '')
+          register(register_name, memoize: true) { load! file, resolver }
+        end
+
+        def load!(path, resolver)
           load_file!(path)
 
           unnecessary_part = case path
