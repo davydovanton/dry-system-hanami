@@ -16,6 +16,21 @@ module Dry
           end
         end
 
+        def register_file!(file, resolver: DEFAULT_RESOLVER)
+          find_file(file) do |f|
+            register_name = f.sub(LIB_FOLDER, '').sub(CORE_FOLDER, '').tr('/', '.').sub(/_repository\z/, '')
+            register(register_name, memoize: true) { load! f, resolver: resolver }
+          end
+        end
+
+        private
+
+        def find_file(file)
+          Dir.chdir(::Hanami.root) do
+            yield *Dir.glob("lib/#{file}.rb").first.sub('.rb', '').to_s
+          end
+        end
+
         def all_files_in_folder(folder)
           Dir.chdir(::Hanami.root) do
             Dir.glob("lib/#{folder}/**/*.rb")
