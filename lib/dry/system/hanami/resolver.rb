@@ -43,14 +43,7 @@ module Dry
         def load!(path, resolver)
           load_file!(path)
 
-          unnecessary_part = case path
-                             when /repositories/
-                               "#{CORE_FOLDER}repositories/"
-                             when /entities/
-                               "#{CORE_FOLDER}entities/"
-                             else
-                               CORE_FOLDER
-                             end
+          unnecessary_part = extract_unnecessary_part(path)
           right_path = path.sub(LIB_FOLDER, '').sub(unnecessary_part, '')
 
           resolver.call(Object.const_get(Inflecto.camelize(right_path)))
@@ -58,6 +51,17 @@ module Dry
 
         def load_file!(path)
           require_relative "#{::Hanami.root}/#{path}"
+        end
+
+        def extract_unnecessary_part(path)
+          case path
+          when /repositories/
+            "#{CORE_FOLDER}repositories/"
+          when /entities/
+            "#{CORE_FOLDER}entities/"
+          else
+            CORE_FOLDER
+          end
         end
       end
     end
