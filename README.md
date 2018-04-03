@@ -37,7 +37,7 @@ class Container < Dry::System::Container
 end
 ```
 
-### `load_file!`
+### `register_file!`
 You can regitser specific file to your container:
 
 ```ruby
@@ -47,9 +47,9 @@ require 'dry/system/hanami'
 class Container < Dry::System::Container
   extend Dry::System::Hanami::Resolver
 
-  load_file! 'project_name/repositories/users'
+  register_file! 'project_name/repositories/users'
   # or with custom resolver
-  load_file! 'project_name/matchers/git_host', resolver: ->(k) { k }
+  register_file! 'project_name/matchers/git_host', resolver: ->(k) { k }
 
   configure
 end
