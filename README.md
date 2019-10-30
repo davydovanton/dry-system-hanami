@@ -20,7 +20,7 @@ Or install it yourself as:
 ## Usage
 
 ### `register_folder!`
-You can regitser full folder to your container:
+You can register full folder to your container:
 
 ```ruby
 require 'dry/system/container'
@@ -38,7 +38,7 @@ end
 ```
 
 ### `register_file!`
-You can regitser specific file to your container:
+You can register specific file to your container:
 
 ```ruby
 require 'dry/system/container'
